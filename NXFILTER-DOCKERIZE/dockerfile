@@ -1,0 +1,18 @@
+FROM 1science/java:oracle-jre-8
+
+RUN wget http://www.nxfilter.org/download/nxfilter-3.5.1.zip 
+
+RUN mkdir /nxfilter \
+  && unzip nxfil* -d /nxfilter \
+  && rm -f *.zip \
+  && mkdir -p /nxfilter/shallalist \
+  && cd /nxfilter/shallalist \
+  && wget http://www.shallalist.de/Downloads/shallalist.tar.gz \
+  && tar -zxf shallalist.tar.gz 
+
+COPY ./bin/startup.sh /nxfilter/bin/startup.sh
+
+RUN chmod +x /nxfilter/bin/update-sh.sh \
+    && chmod +x /nxfilter/bin/startup.sh 
+
+CMD sh /nxfilter/bin/update-sh.sh /nxfilter/shallalist/BL && /nxfilter/bin/startup.sh

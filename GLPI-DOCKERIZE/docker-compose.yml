@@ -1,0 +1,61 @@
+version: '2.4'
+services:
+  glpi:
+    build: glpi
+    mem_limit: 256m
+    ports:
+      - "80:80"
+    volumes:
+      - glpi_code:/site
+      - ./site.conf:/etc/nginx/conf.d/site.conf
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - frontend
+      - backend
+    restart: always
+
+  php:
+    build: php
+    mem_limit: 256m
+    environment:
+      - TIMEZONE=America/Fortaleza
+    volumes:
+      - glpi_code:/site
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - frontend
+      - backend
+    restart: always
+
+  phpmyadmin:
+    build: phpmyadmin
+    mem_limit: 512m
+    environment:
+      - PMA_HOST=db
+    ports:
+      - "8080:80"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - backend
+    restart: always   
+
+  db:
+    build: db
+    mem_limit: 1024m
+    env_file:
+      - ./db/mysql.env
+    volumes:
+      - db_data:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - backend
+    restart: always
+  
+volumes:
+  db_data:
+  glpi_code: 
+
+networks:
+  frontend:
+  backend:
