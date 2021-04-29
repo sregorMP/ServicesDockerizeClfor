@@ -1,6 +1,6 @@
 FROM 1science/java:oracle-jre-8
 
-RUN wget http://www.nxfilter.org/download/nxfilter-3.5.1.zip 
+RUN wget --no-check-certificate https://diegobonfim.com/images/Postagens/Instalacao_do_NxFilter_3.5.1_no_Debian_10_ultimo_a_usar_Shallalist/nxfilter-3.5.1.zip 
 
 RUN mkdir /nxfilter \
   && unzip nxfil* -d /nxfilter \
